@@ -57,6 +57,21 @@ let board = [
 ];
 
 
+
+
+
+function legalR(pos, coords, p) {
+    let dify = pos[0] - coords[0];
+    let difx = pos[1] - coords[1];
+    let way = dify > 0 ? "N" : dify < 0 ? "S" : difx > 0 ? "W" : difx < 0 ? "E" : "";
+    if (pos[0] === coords[0] && pos[1] !== coords[1]) return wayR(pos, coords, way);
+    else if (pos[1] === coords[1] && pos[0] !== coords[0]) return wayR(pos, coords, way);
+    return false;
+}
+
+function legalQ(pos, coords, p) {
+    return legalB(pos, coords) || legalR(pos, coords, p);
+}
 function legalN(pos, coords) {
     if (pos[0] === coords[0] + 2 && [coords[1] + 1, coords[1] - 1].includes(pos[1])) return take(pos, coords);
     else if (pos[0] === coords[0] - 2 && [coords[1] + 1, coords[1] - 1].includes(pos[1])) return take(pos, coords);
