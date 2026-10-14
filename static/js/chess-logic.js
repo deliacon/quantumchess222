@@ -80,6 +80,17 @@ function legalN(pos, coords) {
     return false;
 }
 
+function legalB(pos, coords) {
+    let dify = pos[0] - coords[0];
+    let difx = pos[1] - coords[1];
+    let wayY = dify > 0 ? "N" : dify < 0 ? "S" : "";
+    let wayX = difx > 0 ? "W" : difx < 0 ? "E" : "";
+    let way = wayY + wayX;
+    if (Math.abs(pos[0] - coords[0]) === Math.abs(pos[1] - coords[1]) && pos[0] !== coords[0]) {
+        return wayB(pos, coords, way);
+    }
+    return false;
+}
 function legalP(pos, coords, p) {
     if (p.Team === "W") {
         if (p.Pos[0] + 1 === coords[0] && [p.Pos[1] - 1, p.Pos[1] + 1].includes(coords[1])) return take(pos, coords);
