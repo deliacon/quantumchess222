@@ -64,3 +64,16 @@ function legalN(pos, coords) {
     else if (pos[1] === coords[1] - 2 && [coords[0] + 1, coords[0] - 1].includes(pos[0])) return take(pos, coords);
     return false;
 }
+
+function legalP(pos, coords, p) {
+    if (p.Team === "W") {
+        if (p.Pos[0] + 1 === coords[0] && [p.Pos[1] - 1, p.Pos[1] + 1].includes(coords[1])) return take(pos, coords);
+        if (p.Beg === 1 && [coords[0] - 1, coords[0] - 2].includes(pos[0]) && pos[1] === coords[1]) return wayP(pos, coords, "W");
+        else if (pos[0] === coords[0] - 1 && pos[1] === coords[1]) return wayP(pos, coords, "W");
+    } else if (p.Team === "B") {
+        if (p.Pos[0] - 1 === coords[0] && [p.Pos[1] - 1, p.Pos[1] + 1].includes(coords[1])) return take(pos, coords);
+        if (p.Beg === 1 && [coords[0] + 1, coords[0] + 2].includes(pos[0]) && pos[1] === coords[1]) return wayP(pos, coords, "B");
+        else if (pos[0] === coords[0] + 1 && pos[1] === coords[1]) return wayP(pos, coords, "B");
+    }
+    return false;
+}
