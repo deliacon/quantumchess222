@@ -79,3 +79,15 @@ function legalN(pos, coords) {
     else if (pos[1] === coords[1] - 2 && [coords[0] + 1, coords[0] - 1].includes(pos[0])) return take(pos, coords);
     return false;
 }
+
+function legalB(pos, coords) {
+    let dify = pos[0] - coords[0];
+    let difx = pos[1] - coords[1];
+    let wayY = dify > 0 ? "N" : dify < 0 ? "S" : "";
+    let wayX = difx > 0 ? "W" : difx < 0 ? "E" : "";
+    let way = wayY + wayX;
+    if (Math.abs(pos[0] - coords[0]) === Math.abs(pos[1] - coords[1]) && pos[0] !== coords[0]) {
+        return wayB(pos, coords, way);
+    }
+    return false;
+}
