@@ -55,3 +55,12 @@ let board = [
     [P_B_1, P_B_2, P_B_3, P_B_4, P_B_5, P_B_6, P_B_7, P_B_8],
     [R_B_1, N_B_1, B_B_1, K_B_1, Q_B_1, B_B_2, N_B_2, R_B_2]
 ];
+
+
+function legalN(pos, coords) {
+    if (pos[0] === coords[0] + 2 && [coords[1] + 1, coords[1] - 1].includes(pos[1])) return take(pos, coords);
+    else if (pos[0] === coords[0] - 2 && [coords[1] + 1, coords[1] - 1].includes(pos[1])) return take(pos, coords);
+    else if (pos[1] === coords[1] + 2 && [coords[0] + 1, coords[0] - 1].includes(pos[0])) return take(pos, coords);
+    else if (pos[1] === coords[1] - 2 && [coords[0] + 1, coords[0] - 1].includes(pos[0])) return take(pos, coords);
+    return false;
+}
