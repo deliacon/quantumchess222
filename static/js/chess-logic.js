@@ -72,3 +72,10 @@ function legalR(pos, coords, p) {
 function legalQ(pos, coords, p) {
     return legalB(pos, coords) || legalR(pos, coords, p);
 }
+function legalN(pos, coords) {
+    if (pos[0] === coords[0] + 2 && [coords[1] + 1, coords[1] - 1].includes(pos[1])) return take(pos, coords);
+    else if (pos[0] === coords[0] - 2 && [coords[1] + 1, coords[1] - 1].includes(pos[1])) return take(pos, coords);
+    else if (pos[1] === coords[1] + 2 && [coords[0] + 1, coords[0] - 1].includes(pos[0])) return take(pos, coords);
+    else if (pos[1] === coords[1] - 2 && [coords[0] + 1, coords[0] - 1].includes(pos[0])) return take(pos, coords);
+    return false;
+}
