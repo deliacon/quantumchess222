@@ -55,3 +55,20 @@ let board = [
     [P_B_1, P_B_2, P_B_3, P_B_4, P_B_5, P_B_6, P_B_7, P_B_8],
     [R_B_1, N_B_1, B_B_1, K_B_1, Q_B_1, B_B_2, N_B_2, R_B_2]
 ];
+
+
+
+
+
+function legalR(pos, coords, p) {
+    let dify = pos[0] - coords[0];
+    let difx = pos[1] - coords[1];
+    let way = dify > 0 ? "N" : dify < 0 ? "S" : difx > 0 ? "W" : difx < 0 ? "E" : "";
+    if (pos[0] === coords[0] && pos[1] !== coords[1]) return wayR(pos, coords, way);
+    else if (pos[1] === coords[1] && pos[0] !== coords[0]) return wayR(pos, coords, way);
+    return false;
+}
+
+function legalQ(pos, coords, p) {
+    return legalB(pos, coords) || legalR(pos, coords, p);
+}
