@@ -57,6 +57,49 @@ let board = [
 ];
 
 
+function resetBoard() {
+    turn = "W";
+    winner = null;
+    active_piece = null;
+    if (Object.keys(links).length !== 0) {
+        for (let key in links) delete links[key];
+    }
+
+    for (let i of pieces.slice()) {
+        if (i.Split === true) {
+            if ("Actual" in i) {
+                delete i.Actual;
+            }
+        }
+        if (i.Real === false) {
+            pieces.splice(pieces.indexOf(i), 1);
+        }
+    }
+    pieces.length = 0;
+
+    board = Array.from({length: 8}, () => new Array(8).fill('0'));
+
+    let initial_pieces = [R_W_1, N_W_1, B_W_1, K_W_1, Q_W_1, B_W_2, N_W_2, R_W_2,
+                          P_W_1, P_W_2, P_W_3, P_W_4, P_W_5, P_W_6, P_W_7, P_W_8,
+                          P_B_1, P_B_2, P_B_3, P_B_4, P_B_5, P_B_6, P_B_7, P_B_8,
+                          R_B_1, N_B_1, B_B_1, K_B_1, Q_B_1, B_B_2, N_B_2, R_B_2];
+
+    for (let p of initial_pieces) {
+        p.Split = false;
+        p.Real = true;
+        if (["R", "K", "P"].includes(p.Type)) p.Beg = 1;
+        if (p.Type === "Q") p.Beg = 0;
+    }
+
+    [R_W_1, N_W_1, B_W_1, K_W_1, Q_W_1, B_W_2, N_W_2, R_W_2].forEach((p, idx) => p.Pos = [1, idx + 1]);
+    [P_W_1, P_W_2, P_W_3, P_W_4, P_W_5, P_W_6, P_W_7, P_W_8].forEach((p, idx) => p.Pos = [2, idx + 1]);
+    [P_B_1, P_B_2, P_B_3, P_B_4, P_B_5, P_B_6, P_B_7, P_B_8].forEach((p, idx) => p.Pos = [7, idx + 1]);
+    [R_B_1, N_B_1, B_B_1, K_B_1, Q_B_1, B_B_2, N_B_2, R_B_2].forEach((p, idx) => p.Pos = [8, idx + 1]);
+
+    pieces.push(...initial_pieces);
+    update();
+}
+
 
 
 
