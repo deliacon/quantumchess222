@@ -57,6 +57,49 @@ let board = [
 ];
 
 
+function resetBoard() {
+    turn = "W";
+    winner = null;
+    active_piece = null;
+    if (Object.keys(links).length !== 0) {
+        for (let key in links) delete links[key];
+    }
+
+    for (let i of pieces.slice()) {
+        if (i.Split === true) {
+            if ("Actual" in i) {
+                delete i.Actual;
+            }
+        }
+        if (i.Real === false) {
+            pieces.splice(pieces.indexOf(i), 1);
+        }
+    }
+    pieces.length = 0;
+
+    board = Array.from({length: 8}, () => new Array(8).fill('0'));
+
+    let initial_pieces = [R_W_1, N_W_1, B_W_1, K_W_1, Q_W_1, B_W_2, N_W_2, R_W_2,
+                          P_W_1, P_W_2, P_W_3, P_W_4, P_W_5, P_W_6, P_W_7, P_W_8,
+                          P_B_1, P_B_2, P_B_3, P_B_4, P_B_5, P_B_6, P_B_7, P_B_8,
+                          R_B_1, N_B_1, B_B_1, K_B_1, Q_B_1, B_B_2, N_B_2, R_B_2];
+
+    for (let p of initial_pieces) {
+        p.Split = false;
+        p.Real = true;
+        if (["R", "K", "P"].includes(p.Type)) p.Beg = 1;
+        if (p.Type === "Q") p.Beg = 0;
+    }
+
+    [R_W_1, N_W_1, B_W_1, K_W_1, Q_W_1, B_W_2, N_W_2, R_W_2].forEach((p, idx) => p.Pos = [1, idx + 1]);
+    [P_W_1, P_W_2, P_W_3, P_W_4, P_W_5, P_W_6, P_W_7, P_W_8].forEach((p, idx) => p.Pos = [2, idx + 1]);
+    [P_B_1, P_B_2, P_B_3, P_B_4, P_B_5, P_B_6, P_B_7, P_B_8].forEach((p, idx) => p.Pos = [7, idx + 1]);
+    [R_B_1, N_B_1, B_B_1, K_B_1, Q_B_1, B_B_2, N_B_2, R_B_2].forEach((p, idx) => p.Pos = [8, idx + 1]);
+
+    pieces.push(...initial_pieces);
+    update();
+}
+
 
 
 
@@ -72,6 +115,7 @@ function legalR(pos, coords, p) {
 function legalQ(pos, coords, p) {
     return legalB(pos, coords) || legalR(pos, coords, p);
 }
+
 function legalN(pos, coords) {
     if (pos[0] === coords[0] + 2 && [coords[1] + 1, coords[1] - 1].includes(pos[1])) return take(pos, coords);
     else if (pos[0] === coords[0] - 2 && [coords[1] + 1, coords[1] - 1].includes(pos[1])) return take(pos, coords);
@@ -100,6 +144,36 @@ function wayR(pos, coords, way) {
         else if (way === "S" && board[pos[0] + (i + 1) - 1][pos[1] - 1] !== '0') return i === dif - 1 ? take(pos, coords) : false;
         else if (way === "E" && board[pos[0] - 1][pos[1] + (i + 1) - 1] !== '0') return i === dif - 1 ? take(pos, coords) : false;
         else if (way === "W" && board[pos[0] - 1][pos[1] - (i + 1) - 1] !== '0') return i === dif - 1 ? take(pos, coords) : false;
+function legalP(pos, coords, p) {
+    if (p.Team === "W") {
+        if (p.Pos[0] + 1 === coords[0] && [p.Pos[1] - 1, p.Pos[1] + 1].includes(coords[1])) return take(pos, coords);
+        if (p.Beg === 1 && [coords[0] - 1, coords[0] - 2].includes(pos[0]) && pos[1] === coords[1]) return wayP(pos, coords, "W");
+        else if (pos[0] === coords[0] - 1 && pos[1] === coords[1]) return wayP(pos, coords, "W");
+    } else if (p.Team === "B") {
+        if (p.Pos[0] - 1 === coords[0] && [p.Pos[1] - 1, p.Pos[1] + 1].includes(coords[1])) return take(pos, coords);
+        if (p.Beg === 1 && [coords[0] + 1, coords[0] + 2].includes(pos[0]) && pos[1] === coords[1]) return wayP(pos, coords, "B");
+        else if (pos[0] === coords[0] + 1 && pos[1] === coords[1]) return wayP(pos, coords, "B");
+    }
+    return false;
+}
+
+function wayB(pos, coords, way) {
+    let dif = Math.abs(pos[0] - coords[0]);
+    for (let i = 0; i < dif; i++) {
+        if (way === "NW" && board[pos[0] - (i + 1) - 1][pos[1] - (i + 1) - 1] !== '0') return i === dif - 1 ? take(pos, coords) : false;
+        else if (way === "NE" && board[pos[0] - (i + 1) - 1][pos[1] + (i + 1) - 1] !== '0') return i === dif - 1 ? take(pos, coords) : false;
+        else if (way === "SW" && board[pos[0] + (i + 1) - 1][pos[1] - (i + 1) - 1] !== '0') return i === dif - 1 ? take(pos, coords) : false;
+        else if (way === "SE" && board[pos[0] + (i + 1) - 1][pos[1] + (i + 1) - 1] !== '0') return i === dif - 1 ? take(pos, coords) : false;
+    }
+    return true;
+}
+
+
+function wayP(pos, coords, team) {
+    let dif = Math.abs(pos[0] - coords[0]);
+    for (let i = 0; i < dif; i++) {
+        if (team === "W" && board[pos[0] + (i + 1) - 1][pos[1] - 1] !== '0') return false;
+        else if (team === "B" && board[pos[0] - (i + 1) - 1][pos[1] - 1] !== '0') return false;
     }
     return true;
 }
