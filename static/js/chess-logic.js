@@ -72,6 +72,7 @@ function legalR(pos, coords, p) {
 function legalQ(pos, coords, p) {
     return legalB(pos, coords) || legalR(pos, coords, p);
 }
+
 function legalN(pos, coords) {
     if (pos[0] === coords[0] + 2 && [coords[1] + 1, coords[1] - 1].includes(pos[1])) return take(pos, coords);
     else if (pos[0] === coords[0] - 2 && [coords[1] + 1, coords[1] - 1].includes(pos[1])) return take(pos, coords);
@@ -91,6 +92,7 @@ function legalB(pos, coords) {
     }
     return false;
 }
+
 function legalP(pos, coords, p) {
     if (p.Team === "W") {
         if (p.Pos[0] + 1 === coords[0] && [p.Pos[1] - 1, p.Pos[1] + 1].includes(coords[1])) return take(pos, coords);
@@ -102,4 +104,14 @@ function legalP(pos, coords, p) {
         else if (pos[0] === coords[0] + 1 && pos[1] === coords[1]) return wayP(pos, coords, "B");
     }
     return false;
+}
+
+
+function wayP(pos, coords, team) {
+    let dif = Math.abs(pos[0] - coords[0]);
+    for (let i = 0; i < dif; i++) {
+        if (team === "W" && board[pos[0] + (i + 1) - 1][pos[1] - 1] !== '0') return false;
+        else if (team === "B" && board[pos[0] - (i + 1) - 1][pos[1] - 1] !== '0') return false;
+    }
+    return true;
 }
