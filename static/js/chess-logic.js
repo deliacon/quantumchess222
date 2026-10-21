@@ -103,3 +103,15 @@ function legalP(pos, coords, p) {
     }
     return false;
 }
+
+function wayB(pos, coords, way) {
+    let dif = Math.abs(pos[0] - coords[0]);
+    for (let i = 0; i < dif; i++) {
+        if (way === "NW" && board[pos[0] - (i + 1) - 1][pos[1] - (i + 1) - 1] !== '0') return i === dif - 1 ? take(pos, coords) : false;
+        else if (way === "NE" && board[pos[0] - (i + 1) - 1][pos[1] + (i + 1) - 1] !== '0') return i === dif - 1 ? take(pos, coords) : false;
+        else if (way === "SW" && board[pos[0] + (i + 1) - 1][pos[1] - (i + 1) - 1] !== '0') return i === dif - 1 ? take(pos, coords) : false;
+        else if (way === "SE" && board[pos[0] + (i + 1) - 1][pos[1] + (i + 1) - 1] !== '0') return i === dif - 1 ? take(pos, coords) : false;
+    }
+    return true;
+}
+
