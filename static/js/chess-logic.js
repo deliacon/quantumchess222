@@ -136,6 +136,14 @@ function legalB(pos, coords) {
     return false;
 }
 
+
+function wayR(pos, coords, way) {
+    let dif = ["N", "S"].includes(way) ? Math.abs(pos[0] - coords[0]) : Math.abs(pos[1] - coords[1]);
+    for (let i = 0; i < dif; i++) {
+        if (way === "N" && board[pos[0] - (i + 1) - 1][pos[1] - 1] !== '0') return i === dif - 1 ? take(pos, coords) : false;
+        else if (way === "S" && board[pos[0] + (i + 1) - 1][pos[1] - 1] !== '0') return i === dif - 1 ? take(pos, coords) : false;
+        else if (way === "E" && board[pos[0] - 1][pos[1] + (i + 1) - 1] !== '0') return i === dif - 1 ? take(pos, coords) : false;
+        else if (way === "W" && board[pos[0] - 1][pos[1] - (i + 1) - 1] !== '0') return i === dif - 1 ? take(pos, coords) : false;
 function legalP(pos, coords, p) {
     if (p.Team === "W") {
         if (p.Pos[0] + 1 === coords[0] && [p.Pos[1] - 1, p.Pos[1] + 1].includes(coords[1])) return take(pos, coords);
