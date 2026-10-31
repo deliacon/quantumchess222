@@ -181,3 +181,26 @@ function wayP(pos, coords, team) {
     }
     return true;
 }
+
+
+function move(p, coords) {
+    active_piece = p;
+    if (turn === p.Team) {
+        let legal = false;
+        if (p.Type === "R" && legalR(p.Pos, coords, p)) legal = true;
+        else if (p.Type === "N" && legalN(p.Pos, coords)) legal = true;
+        else if (p.Type === "B" && legalB(p.Pos, coords)) legal = true;
+        else if (p.Type === "Q" && legalQ(p.Pos, coords, p)) legal = true;
+        else if (p.Type === "P" && legalP(p.Pos, coords, p)) legal = true;
+        else if (p.Type === "K" && legalK(p.Pos, coords, p)) legal = true;
+
+        if (legal) {
+            p.Pos = coords;
+            update();
+            if ("Beg" in p) p.Beg = 0;
+            turn = (turn === "W") ? "B" : "W";
+        }
+        return legal;
+    }
+    return false;
+}
