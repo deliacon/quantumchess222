@@ -254,6 +254,41 @@ function wayP(pos, coords, team) {
     return true;
 }
 
+function take(pos, coords) {
+    let p = active_piece;
+    if (p.Real === false) {
+        return board[coords[0] - 1][coords[1] - 1] === '0' ? true : false;
+    }
+
+    for (let i of pieces.slice()) {
+        if (i.Pos[0] === coords[0] && i.Pos[1] === coords[1]) {
+            if (i.Team !== p.Team) {
+                if (i.Split === true) {
+                    if (i.Real === false) {
+                        pieces.splice(pieces.indexOf(i), 1);
+                        delete links[i.Name.slice(0, -2)];
+                        i.Actual.Split = false;
+                        return true;
+                    } else if (i.Real === true) {
+                        let linkedPiece = links[i.Name];
+                        if (linkedPiece) pieces.splice(pieces.indexOf(linkedPiece), 1);
+                        delete links[i.Name];
+                        i.Split = false;
+                        pieces.splice(pieces.indexOf(i), 1);
+                        return true;
+                    }
+                } else {
+                    pieces.splice(pieces.indexOf(i), 1);
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        }
+    }
+    if (p.Type === "N") return true;
+      return false;
+}
 
 function move(p, coords) {
     active_piece = p;
@@ -274,5 +309,5 @@ function move(p, coords) {
         }
         return legal;
     }
-    return false;
 }
+
