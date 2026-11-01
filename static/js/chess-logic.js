@@ -150,6 +150,78 @@ function legalP(pos, coords, p) {
     return false;
 }
 
+function legalK(pos, coords, p) {
+    if (Math.abs(pos[0] - coords[0]) <= 1 && Math.abs(pos[1] - coords[1]) <= 1) {
+        return wayK(pos, coords);
+    }
+
+    if (p.Beg === 1 && pos[0] === coords[0] && Math.abs(pos[1] - coords[1]) === 2) {
+        let team = p.Team;
+        let row_idx = pos[0] - 1;
+
+        if (coords[1] === pos[1] + 2) {
+            let rook = pieces.find(r => r.Type === "R" && r.Team === team && r.Pos[0] === pos[0] && r.Pos[1] === 8 && r.Beg === 1);
+            if (rook) {
+                let path_clear = true;
+                for (let c = pos[1]; c < rook.Pos[1] - 1; c++) {
+                    if (board[row_idx][c] !== '0') {
+                        path_clear = false; break;
+                    }
+                }
+                if (path_clear) {
+                    rook.Pos = [pos[0], pos[1] + 1];
+                    return true;
+                }
+            }
+        } else if (coords[1] === pos[1] - 2) {
+            let rook = pieces.find(r => r.Type === "R" && r.Team === team && r.Pos[0] === pos[0] && r.Pos[1] === 1 && r.Beg === 1);
+            if (rook) {
+                let path_clear = true;
+                for (let c = rook.Pos[1]; c < pos[1] - 1; c++) {
+                    if (board[row_idx][c] !== '0') {
+                        path_clear = false; break;
+                    }
+                }
+                if (path_clear) {
+                    rook.Pos = [pos[0], pos[1] - 1];
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+function cast(p) {
+    if (turn === p.Team) {
+        let team = p.Team;
+        if (p.Type === "R" && p.Beg === 1 && kings[team].Beg === 1) {
+            kings[team].Beg = 0;
+            let dif = Math.abs(kings[team].Pos[1] - p.Pos[1]);
+            if (dif === 3) {
+                if (wayR(p.Pos, [p.Pos[0], p.Pos[1] + (dif - 1)], "E")) {
+                    p.Pos = [p.Pos[0], p.Pos[1] + (dif - 1)];
+                    kings[team].Pos = [kings[team].Pos[0], kings[team].Pos[1] - (dif - 1)];
+                    update();
+                    turn = (turn === "W") ? "B" : "W";
+                }
+            } else if (dif === 4) {
+                if (wayR(p.Pos, [p.Pos[0], p.Pos[1] - (dif - 1)], "W")) {
+                    p.Pos = [p.Pos[0], p.Pos[1] - (dif - 1)];
+                    kings[team].Pos = [kings[team].Pos[0], kings[team].Pos[1] + (dif - 2)];
+                    update();
+                    turn = (turn === "W") ? "B" : "W";
+                }
+            }
+        }
+    }
+}
+
+function wayK(pos, coords) {
+    if (board[coords[0] - 1][coords[1] - 1] !== '0') return take(pos, coords);
+    return true;
+}
+
 
 function wayR(pos, coords, way) {
     let dif = ["N", "S"].includes(way) ? Math.abs(pos[0] - coords[0]) : Math.abs(pos[1] - coords[1]);
