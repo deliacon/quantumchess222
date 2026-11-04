@@ -102,6 +102,21 @@ function resetBoard() {
 
 
 
+function win(t) {
+    winner = t;
+}
+
+function showTrue() {
+    let temp = Array.from({length: 8}, () => new Array(8).fill('--0--'));
+    let sortedPieces = pieces.slice().sort((a, b) => (a.Real === b.Real ? 0 : a.Real ? 1 : -1));
+    for (let i of sortedPieces) {
+        let y = i.Pos[0], x = i.Pos[1];
+        temp[y - 1][x - 1] = i.Name;
+    }
+    return temp;
+}
+
+
 
 function legalR(pos, coords, p) {
     let dify = pos[0] - coords[0];
@@ -330,4 +345,21 @@ function splitMove(copy, copycoords, real, realcoords) {
         move(real, realcoords);
     }
     return true;
+}
+function split(p) {
+    if (turn === p.Team && p.Split === false) {
+        let s = Object.assign({}, p); // Shallow copy to mirror Python dict.copy()
+        s.Pos = [...p.Pos]; // Ensure separate position array
+        s.Split = true;
+        p.Split = true;
+        s.Real = false;
+        s.Name = `${p.Name}_S`;
+        links[`${p.Name}`] = s;
+        s.Actual = p;
+        pieces.push(s);
+        update();
+        turn = (turn === "W") ? "B" : "W";
+        return true;
+    }
+    return false;
 }
