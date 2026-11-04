@@ -323,3 +323,11 @@ function move(p, coords) {
     }
 }
 
+function splitMove(copy, copycoords, real, realcoords) {
+    let current_turn = turn;
+    if (move(copy, copycoords)) {
+        turn = current_turn;
+        move(real, realcoords);
+    }
+    return true;
+}
