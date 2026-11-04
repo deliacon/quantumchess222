@@ -254,6 +254,18 @@ function wayP(pos, coords, team) {
     return true;
 }
 
+function update() {
+    board = Array.from({length: 8}, () => new Array(8).fill('0'));
+    if (!pieces.includes(K_W_1)) {
+        win("B");
+    } else if (!pieces.includes(K_B_1)) {
+        win("W");
+    }
+
+    for (let i of pieces) {
+        board[i.Pos[0] - 1][i.Pos[1] - 1] = i;
+    }
+}
 function take(pos, coords) {
     let p = active_piece;
     if (p.Real === false) {
