@@ -338,6 +338,14 @@ function move(p, coords) {
     }
 }
 
+function splitMove(copy, copycoords, real, realcoords) {
+    let current_turn = turn;
+    if (move(copy, copycoords)) {
+        turn = current_turn;
+        move(real, realcoords);
+    }
+    return true;
+}
 function split(p) {
     if (turn === p.Team && p.Split === false) {
         let s = Object.assign({}, p); // Shallow copy to mirror Python dict.copy()
