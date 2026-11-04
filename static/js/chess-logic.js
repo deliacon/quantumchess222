@@ -102,6 +102,21 @@ function resetBoard() {
 
 
 
+function win(t) {
+    winner = t;
+}
+
+function showTrue() {
+    let temp = Array.from({length: 8}, () => new Array(8).fill('--0--'));
+    let sortedPieces = pieces.slice().sort((a, b) => (a.Real === b.Real ? 0 : a.Real ? 1 : -1));
+    for (let i of sortedPieces) {
+        let y = i.Pos[0], x = i.Pos[1];
+        temp[y - 1][x - 1] = i.Name;
+    }
+    return temp;
+}
+
+
 
 function legalR(pos, coords, p) {
     let dify = pos[0] - coords[0];
