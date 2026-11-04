@@ -348,8 +348,8 @@ function splitMove(copy, copycoords, real, realcoords) {
 }
 function split(p) {
     if (turn === p.Team && p.Split === false) {
-        let s = Object.assign({}, p); // Shallow copy to mirror Python dict.copy()
-        s.Pos = [...p.Pos]; // Ensure separate position array
+        let s = Object.assign({}, p);
+        s.Pos = [...p.Pos];
         s.Split = true;
         p.Split = true;
         s.Real = false;
