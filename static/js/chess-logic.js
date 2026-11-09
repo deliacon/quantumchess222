@@ -363,3 +363,13 @@ function split(p) {
     }
     return false;
 }
+
+function get_piece_by_name(name) {
+    for (let p of pieces) {
+        if (p.Name === name) {
+            return p;
+        }
+    }
+    return null;
+}
+
