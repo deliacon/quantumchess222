@@ -1,7 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Chess</title>
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
+    <div class="container">
+        <div class="board-container">
+            <div id="chessboard" class="chessboard"></div>
+        </div>
+        
+        <div class="controls">
+            <h1>Quantum Chess</h1>
+            <h2 id="turn-indicator">Turn: White</h2>
+            <h3 id="winner-indicator" class="hidden"></h3>
+
+            <div class="control-group">
+                <label for="dev-mode">View:</label>
+                <select id="dev-mode">
+                    <option value="false">Player View</option>
+                    <option value="true">Developer View (True Board)</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <h3>Actions</h3>
+                <button id="btn-move" class="active">Normal Move</button>
+                <button id="btn-split">Split Piece</button>
+                <button id="btn-split-move">Split Move</button>
+            </div>
+
+            <div id="instruction-panel" class="instructions">
+                Select a piece, then select a destination square.
+            </div>
+
+            <button id="btn-reset" class="danger">Reset Game</button>
+        </div>
+    </div>
+
+    <script src="../static/js/chess-logic.js"></script>
+    <script src="../static/js/script.js"></script>
 </body>
 </html>
