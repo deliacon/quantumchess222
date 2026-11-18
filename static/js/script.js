@@ -76,6 +76,43 @@ function refreshState() {
     }
     renderBoard();
 }
+
+
+function renderBoard() {
+    boardEl.innerHTML = '';
+    for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+            const square = document.createElement('div');
+            square.className = `square ${(r + c) % 2 === 0 ? 'light' : 'dark'}`;
+            square.dataset.r = r;
+            square.dataset.c = c;
+
+            const pieceName = currentBoard[r][c];
+            if (pieceName !== '--0--') {
+                square.dataset.piece = pieceName;
+                const img = document.createElement('img');
+                img.src = getImagePath(pieceName);
+                img.className = 'piece-img';
+
+                img.onerror = () => {
+                    img.style.display = 'none';
+                    square.innerText = pieceName;
+                };
+                square.appendChild(img);
+            }
+
+            if (selectionState.selectedSquare && selectionState.selectedSquare.r === r && selectionState.selectedSquare.c === c) {
+                square.classList.add('selected');
+            }
+            if (selectionState.splitRealDest && selectionState.splitRealDest.r === r && selectionState.splitRealDest.c === c) {
+                square.classList.add('highlight');
+            }
+
+            square.addEventListener('click', () => handleSquareClick(r, c, pieceName));
+            boardEl.appendChild(square);
+        }
+    }
+}
 function handleSquareClick(r, c, pieceName) {
     if (actionState === 'move') {
         if (!selectionState.selectedSquare) {

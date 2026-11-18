@@ -1,3 +1,6 @@
+const ChessLogic = (function() {
+
+
 let R_W_1 = {Pos: [1, 1], Team: "W", Name: "R_W_1", Type: "R", Beg: 1, Split: false, Real: true};
 let R_W_2 = {Pos: [1, 8], Team: "W", Name: "R_W_2", Type: "R", Beg: 1, Split: false, Real: true};
 let N_W_1 = {Pos: [1, 2], Team: "W", Name: "N_W_1", Type: "N", Split: false, Real: true};
@@ -116,6 +119,31 @@ function showTrue() {
     return temp;
 }
 
+function showW() {
+    let temp = Array.from({length: 8}, () => new Array(8).fill('--0--'));
+    for (let i of pieces) {
+        let y = i.Pos[0], x = i.Pos[1];
+        if (i.Split === true && i.Real === true && i.Team === "B") {
+            temp[8 - y][8 - x] = i.Name + "_S";
+        } else {
+            temp[8 - y][8 - x] = i.Name;
+        }
+    }
+    return temp;
+}
+
+function showB() {
+    let temp = Array.from({length: 8}, () => new Array(8).fill('--0--'));
+    for (let i of pieces) {
+        let y = i.Pos[0], x = i.Pos[1];
+        if (i.Split === true && i.Real === true && i.Team === "W") {
+            temp[y - 1][x - 1] = i.Name + "_S";
+        } else {
+            temp[y - 1][x - 1] = i.Name;
+        }
+    }
+    return temp;
+}
 
 
 function legalR(pos, coords, p) {
@@ -373,3 +401,18 @@ function get_piece_by_name(name) {
     return null;
 }
 
+
+return {
+    resetBoard,
+    showW,
+    showB,
+    showTrue,
+    move,
+    split,
+    splitMove,
+    get_piece_by_name,
+    getTurn: () => turn,
+    getWinner: () => winner
+};
+
+})();
