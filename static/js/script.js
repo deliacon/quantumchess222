@@ -113,6 +113,7 @@ function renderBoard() {
         }
     }
 }
+
 function handleSquareClick(r, c, pieceName) {
     if (actionState === 'move') {
         if (!selectionState.selectedSquare) {
@@ -142,7 +143,6 @@ function handleSquareClick(r, c, pieceName) {
     else if (actionState === 'split_move') {
         if (!selectionState.realPiece) {
             if (pieceName !== '--0--') {
-                // Grab the base piece name regardless of whether the real or fake piece is clicked on top
                 const baseName = pieceName.endsWith('_S') ? pieceName.replace('_S', '') : pieceName;
 
                 selectionState.realPiece = baseName;
@@ -153,7 +153,7 @@ function handleSquareClick(r, c, pieceName) {
         }
         else if (!selectionState.realDest) {
             selectionState.realDest = getPythonCoords(r, c);
-            selectionState.splitRealDest = { r, c }; // visual highlight only
+            selectionState.splitRealDest = { r, c };
             selectionState.selectedSquare = null;
             instructionPanel.innerText = "Select destination for FAKE piece.";
         }
@@ -164,9 +164,12 @@ function handleSquareClick(r, c, pieceName) {
             if (realPiece && copyPiece) {
                 ChessLogic.splitMove(copyPiece, fakeDest, realPiece, selectionState.realDest);
             }
-            resetActionState('move'); // return to normal mode
+            resetActionState('move');
             refreshState();
         }
+    }
+    renderBoard();
+}
 
 function resetActionState(newState) {
     actionState = newState;
