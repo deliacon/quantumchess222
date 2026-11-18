@@ -26,3 +26,37 @@ body {
     border: 4px solid #34495e;
     background-color: #ecf0f1;
 }
+.square {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.square.light { background-color: #f0d9b5; }
+.square.dark { background-color: #b58863; }
+.square.selected { outline: 4px solid #e74c3c; outline-offset: -4px; }
+.square.highlight { background-color: rgba(231, 76, 60, 0.5); }
+
+.piece-img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    pointer-events: none; /* Let clicks pass to square */
+}
+
+.controls {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.control-group {
+    background: #34495e;
+    padding: 15px;
+    border-radius: 8px;
+}
