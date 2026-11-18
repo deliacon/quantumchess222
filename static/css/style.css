@@ -60,3 +60,34 @@ body {
     padding: 15px;
     border-radius: 8px;
 }
+button {
+    padding: 10px 15px;
+    margin: 5px 0;
+    width: 100%;
+    cursor: pointer;
+    background: #7f8c8d;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+button:hover { background: #95a5a6; }
+button.active { background: #27ae60; }
+button.danger { background: #c0392b; margin-top: auto; }
+button.danger:hover { background: #e74c3c; }
+
+select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+}
+
+.instructions {
+    background: #2980b9;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 0.9em;
+}
+
+.hidden { display: none; }
