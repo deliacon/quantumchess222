@@ -76,3 +76,61 @@ function refreshState() {
     }
     renderBoard();
 }
+function handleSquareClick(r, c, pieceName) {
+    if (actionState === 'move') {
+        if (!selectionState.selectedSquare) {
+            if (pieceName !== '--0--') {
+                selectionState.selectedSquare = { r, c, name: pieceName };
+            }
+        } else {
+            const destCoords = getPythonCoords(r, c);
+            const piece = ChessLogic.get_piece_by_name(selectionState.selectedSquare.name);
+            if (piece) {
+                ChessLogic.move(piece, destCoords);
+            }
+            selectionState = {};
+            refreshState();
+        }
+    }
+    else if (actionState === 'split') {
+        if (pieceName !== '--0--') {
+            const piece = ChessLogic.get_piece_by_name(pieceName);
+            if (piece) {
+                ChessLogic.split(piece);
+            }
+            selectionState = {};
+            refreshState();
+        }
+    }
+    else if (actionState === 'split_move') {
+        if (!selectionState.realPiece) {
+            if (pieceName !== '--0--') {
+                // Grab the base piece name regardless of whether the real or fake piece is clicked on top
+                const baseName = pieceName.endsWith('_S') ? pieceName.replace('_S', '') : pieceName;
+
+                selectionState.realPiece = baseName;
+                selectionState.fakePiece = baseName + '_S';
+                selectionState.selectedSquare = { r, c };
+                instructionPanel.innerText = "Select destination for REAL piece.";
+            }
+        }
+        else if (!selectionState.realDest) {
+            selectionState.realDest = getPythonCoords(r, c);
+            selectionState.splitRealDest = { r, c }; // visual highlight only
+            selectionState.selectedSquare = null;
+            instructionPanel.innerText = "Select destination for FAKE piece.";
+        }
+        else {
+            const fakeDest = getPythonCoords(r, c);
+            const realPiece = ChessLogic.get_piece_by_name(selectionState.realPiece);
+            const copyPiece = ChessLogic.get_piece_by_name(selectionState.fakePiece);
+            if (realPiece && copyPiece) {
+                ChessLogic.splitMove(copyPiece, fakeDest, realPiece, selectionState.realDest);
+            }
+            resetActionState('move'); // return to normal mode
+            refreshState();
+        }
+    }
+    renderBoard();
+}
+
