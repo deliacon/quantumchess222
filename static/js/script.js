@@ -76,3 +76,36 @@ function refreshState() {
     }
     renderBoard();
 }
+
+function resetActionState(newState) {
+    actionState = newState;
+    selectionState = {};
+    [btnMove, btnSplit, btnSplitMove].forEach(b => b.classList.remove('active'));
+
+    if (newState === 'move') {
+        btnMove.classList.add('active');
+        instructionPanel.innerText = "Select a piece, then select a destination square.";
+    } else if (newState === 'split') {
+        btnSplit.classList.add('active');
+        instructionPanel.innerText = "Click one of your pieces to split it.";
+    } else if (newState === 'split_move') {
+        btnSplitMove.classList.add('active');
+        instructionPanel.innerText = "Select the REAL piece to move.";
+    }
+    renderBoard();
+}
+
+btnMove.addEventListener('click', () => resetActionState('move'));
+btnSplit.addEventListener('click', () => resetActionState('split'));
+btnSplitMove.addEventListener('click', () => resetActionState('split_move'));
+devModeSelect.addEventListener('change', refreshState);
+
+btnReset.addEventListener('click', () => {
+    ChessLogic.resetBoard();
+    winnerIndicator.classList.add('hidden');
+    resetActionState('move');
+    refreshState();
+});
+
+ChessLogic.resetBoard();
+refreshState();
